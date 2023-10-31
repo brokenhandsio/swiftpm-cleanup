@@ -11,12 +11,16 @@ It will remove:
 Optionally, by passing the `--clean-derived-data` flag, it will also remove:
   - `/your_home_directory/Library/Developer/Xcode/DerivedData/your_project`
 
+If you want to specify a project other than the one in the current directory, use the --path option:
+
+  - `--path /path/to/your_project`
+
 ## Usage
 
 - Clone the script file into your project's directory
 - Run it with 
 ```bash 
-swift cleanup.swift [--clean-derived-data]
+swift cleanup.swift [--path /path/to/your_project] [--clean-derived-data]
 ```
 
 Make sure to:
