@@ -67,7 +67,6 @@ for path in pathsToClean(for: projectPath) {
 }
 
 if shouldDeleteDerivedData {
-    let projectName = URL(fileURLWithPath: fileManager.currentDirectoryPath).lastPathComponent
     deleteDerivedData(for: projectName)
 } else {
     print("Skipping DerivedData. Use '--clean-derived-data' flag to clean it.")
