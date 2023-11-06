@@ -6,15 +6,18 @@ import Foundation
 
 let fileManager = FileManager.default
 let homeDirectory = NSHomeDirectory()
+
 let derivedDataPath = "\(homeDirectory)/Library/Developer/Xcode/DerivedData"
 
-let pathsToClean = [
-    "./.build",
-    "./Package.resolved",
-    "./.swiftpm",
-    "\(homeDirectory)/.swiftpm",
-    "\(homeDirectory)/Library/Caches/org.swift.swiftpm",
-]
+func pathsToClean(for path: String) -> [String] {
+    [
+        "\(path)/.build",
+        "\(path)/Package.resolved",
+        "\(path)/.swiftpm",
+        "\(homeDirectory)/.swiftpm",
+        "\(homeDirectory)/Library/Caches/org.swift.swiftpm",
+    ]
+}
 
 func delete(path: String) {
     do {
@@ -29,7 +32,7 @@ func delete(path: String) {
     }
 }
 
-func deleteDerivedDataFor(project: String) {
+func deleteDerivedData(for project: String) {
     do {
         let derivedDataContents = try fileManager.contentsOfDirectory(atPath: derivedDataPath)
         let projectFolder = derivedDataContents.first { $0.contains(project) }
@@ -47,13 +50,24 @@ func deleteDerivedDataFor(project: String) {
 let arguments = CommandLine.arguments
 let shouldDeleteDerivedData = arguments.contains("--clean-derived-data")
 
-for path in pathsToClean {
+let projectPath: String
+if
+    let pathIndex = arguments.firstIndex(of: "--path"),
+    arguments.count > pathIndex + 1
+{
+    projectPath = arguments[pathIndex + 1]
+} else {
+    projectPath = fileManager.currentDirectoryPath
+}
+
+let projectName = URL(fileURLWithPath: projectPath).lastPathComponent
+
+for path in pathsToClean(for: projectPath) {
     delete(path: path)
 }
 
 if shouldDeleteDerivedData {
-    let projectName = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).lastPathComponent
-    deleteDerivedDataFor(project: projectName)
+    deleteDerivedData(for: projectName)
 } else {
     print("Skipping DerivedData. Use '--clean-derived-data' flag to clean it.")
 }
