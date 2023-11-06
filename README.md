@@ -23,6 +23,7 @@ If you want to specify a project other than the one in the current directory, us
 swift cleanup.swift [--path /path/to/your_project] [--clean-derived-data]
 ```
 
-Make sure to:
-  - Run it as normal user and not as root, as that will switch your home directory to `/var/root`
-  - Close any IDE or editor that might be using the project's files
+> [!WARNING]\
+> Make sure to:
+>  - Run it as normal user and not as root, as that will switch your home directory to `/var/root`
+>  - Close any IDE or editor that might be using the project's files, as that will result in permission issues
